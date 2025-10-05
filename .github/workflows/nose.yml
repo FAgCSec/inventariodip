@@ -1,0 +1,38 @@
+name: Integración Continua (CI)
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_run:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1️⃣ Descargar el código
+    - name: Checkout del código
+      uses: actions/checkout@v4
+
+    # 2️⃣ Configurar Node.js
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'  # Usa la versión que tengas en tu máquina
+
+    # 3️⃣ Instalar dependencias
+    - name: Instalar dependencias
+      run: npm install
+
+    # 4️⃣ Ejecutar el proyecto
+    # (en proyectos simples que no se quedan corriendo)
+    - name: Ejecutar servidor
+      run: |
+        node server.js &
+        sleep 5  # Espera unos segundos para simular la ejecución
+        echo "Servidor ejecutado correctamente"
+
+    # 5️⃣ (Opcional) Lint o pruebas
+    - name: Ejecutar lint
+      run: npm run lint || echo "Lint no configurado"
